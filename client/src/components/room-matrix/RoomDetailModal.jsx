@@ -107,9 +107,9 @@ function RoomDetailModal({
 
   // status badge
   const statusColor = {
-    pending: "bg-yellow-500 text-white rounded-full py-2 px-3",
-    on_progress: "text-blue-500",
-    completed: "text-green-500",
+    pending: "bg-yellow-500 text-white rounded-full py-2 px-3 capitalize",
+    on_progress: "bg-blue-500 text-white rounded-full py-2 px-3 capitalize",
+    completed: "bg-green-500 text-white rounded-full py-2 px-3 capitalize",
   };
 
   if (!isOpen || !room) return null;
