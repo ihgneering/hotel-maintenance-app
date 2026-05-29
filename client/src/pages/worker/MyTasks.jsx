@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getMyTasks } from "../../services/roomAssignmentService";
-import TaskList from "../../components/tasks/TaskList";
+import TaskList from "../../components/my-tasks/TaskList";
 import { ClipboardList } from "lucide-react";
 
 function MyTaskPage() {
@@ -35,11 +35,9 @@ function MyTaskPage() {
         </h2>
       </div>
       {loading ? (
-        <div>
-          <div className="flex flex-col items-center bg-white justify-center rounded-md p-5 h-60">
-            <div className="w-12 h-12 rounded-full border-gray-300 border-t-blue-500 border-4 animate-[spin_0.5s_linear_infinite]"></div>
-            <p className="mt-4 text-gray-600">Loading your tasks...</p>
-          </div>
+        <div className="flex flex-col items-center bg-white justify-center rounded-md p-5 h-60">
+          <div className="w-12 h-12 rounded-full border-gray-300 border-t-blue-500 border-4 animate-[spin_0.5s_linear_infinite]"></div>
+          <p className="mt-4 text-gray-600">Loading your tasks...</p>
         </div>
       ) : (
         <TaskList
@@ -47,7 +45,6 @@ function MyTaskPage() {
         onRefresh={fetchTasks}
       />
       )}
-      
     </div>
   );
 }

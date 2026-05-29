@@ -37,7 +37,7 @@ export const createReportService = async ({
 
   if (itemError) throw new Error(itemError.message);
 
-  // update room status to DEFECT
+  // update rooms.status to defect
   const { error: roomError } = await supabase
     .from("rooms")
     .update({ status: "defect" }) // update status to "defect" in rooms db after submit 

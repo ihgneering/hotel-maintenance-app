@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+/* disable double eye icon in several browser */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

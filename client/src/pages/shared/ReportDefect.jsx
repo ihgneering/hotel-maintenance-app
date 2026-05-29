@@ -16,7 +16,7 @@ function ReportDefect() {
   const [loading, setLoading] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState("");
   const [resetKey, setResetKey] = useState(0);
-
+  // default form
   const [defects, setDefects] = useState([
     {
       title: "",

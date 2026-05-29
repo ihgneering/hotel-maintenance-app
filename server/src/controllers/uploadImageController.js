@@ -1,6 +1,9 @@
 import {
   uploadReportImageService,
+  submitWorkerTaskWithImageService,
 } from "../services/uploadImageService.js";
+
+// REPORT DEFECT
 
 // upload defect image (response)
 export const uploadReportImage = async (
@@ -27,6 +30,30 @@ export const uploadReportImage = async (
 
   } catch (err) {
 
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+};
+
+// MY TASKS
+
+// upload worker image submission
+export const submitWorkerTaskWithImage = async (req, res) => {
+  try {
+    const { assignment_worker_id, notes } = req.body;
+    const file = req.file;
+
+    const result =
+      await submitWorkerTaskWithImageService({
+        file,
+        assignment_worker_id,
+        notes,
+      });
+
+    res.status(201).json(result);
+
+  } catch (err) {
     res.status(500).json({
       error: err.message,
     });

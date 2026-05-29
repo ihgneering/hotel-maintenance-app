@@ -3,13 +3,13 @@ import { createAssignment, getWorkers } from "../../services/roomAssignmentServi
 import useDebounce from "../../hooks/useDebounce";
 import { useAuth } from "../../context/AuthContext";
 import { Search } from "lucide-react";
+import StatusBadge from "../../common/StatusBadge";
 
 function RoomDetailModal({ 
   isOpen, 
   onClose, 
   room,
   onAssignmentCreated,
-  assignment,
 }) {
   const { user } = useAuth();
 
@@ -105,13 +105,6 @@ function RoomDetailModal({
     }
   };
 
-  // status badge
-  const statusColor = {
-    pending: "bg-yellow-500 text-white rounded-full py-2 px-3 capitalize",
-    on_progress: "bg-blue-500 text-white rounded-full py-2 px-3 capitalize",
-    completed: "bg-green-500 text-white rounded-full py-2 px-3 capitalize",
-  };
-
   if (!isOpen || !room) return null;
 
   return (
@@ -124,11 +117,11 @@ function RoomDetailModal({
         className=" bg-white flex flex-col p-5 gap-y-4 rounded-md text-primary w-xl"
         onClick={(e) => e.stopPropagation()}
         >
-            <div>
+            <div className="border-b py-4 border-gray-400">
               <div className="relative">
                 <button
                   onClick={onClose}
-                  className="text-gray-500 hover:text-black text-xl absolute right-0"
+                  className="text-gray-400 font-semibold hover:text-gray-700 text-xl absolute right-0 bottom-0"
                 >
                   ✕
                 </button>
@@ -137,29 +130,23 @@ function RoomDetailModal({
                 <h2 className="text-xl flex items-center font-semibold">
                   Room {room.room_number}
                 </h2>
-                <div className="border"></div>
+                <div className="border-l border-gray-400"></div>
                 <span className="text-xl flex items-center font-semibold">
                     Floor {room.floor}
                   </span>
-                <div className="border"></div>
+                <div className="border-l border-gray-400"></div>
                 <p className="text-xl flex items-center font-semibold capitalize ">
                   {room.room_category}
                 </p>
-                <div className="border"></div>
-                {assignment && (
-                  <p className={`text-sm font-semibold capitalize ${statusColor[assignment.status]}`}>
-                      {assignment.status}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-3">
-                <div>
-                  
-                </div>
+                <div className="border-l border-gray-400"></div>
+                <StatusBadge
+                type="room"
+                status={room.status}
+                />
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <h3 className="font-semibold">
                 Assign Maintenance Task
               </h3>
@@ -173,15 +160,21 @@ function RoomDetailModal({
                   className="border border-gray-500 rounded-md p-2 w-full focus:ring-blue-500 focus:border-blue-500 outline-none pl-10"
                 />
               </div>
+              <div className="border-b border-gray-400 pb-4">
+                <p className="font-semibold">
+                  Worker list
+                </p>
+              </div>
               
               {loading ? (
-                <div className="flex flex-col items-center justify-center border rounded-md p-5 h-60">
+                <div className="flex flex-col items-center justify-center p-5 h-60">
                   <div className="w-12 h-12 rounded-full border-gray-300 border-t-blue-500 border-4 animate-[spin_0.5s_linear_infinite]"></div>
                   <p className="mt-4 text-gray-600">Loading workers...</p>
                 </div>
               ) : (
-                <div className="max-h-60 overflow-y-auto space-y-2 border p-2 rounded-md">
+                <div className="max-h-60 overflow-y-auto p-2 space-y-1 rounded-md">
                   {filteredWorkers.map((worker) => {
+                    
                     const isSelected = selectedWorkers.includes(worker.id);
 
                     return (
@@ -206,20 +199,21 @@ function RoomDetailModal({
 
               <div className="flex flex-wrap gap-2">
                 {selectedWorkers.map((id) => {
+
                   const worker = workers.find((w) => w.id === id);
 
                   return (
                     <div
                       key={id}
-                      className="flex items-center gap-2 bg-blue-500 text-white px-3 py-1 rounded-full"
+                      className="flex items-center gap-2 bg-blue-500 px-3 py-2 rounded-full"
                     >
-                      <span>
+                      <span className="text-sm font-semibold text-white">
                         {worker?.first_name} {worker?.last_name}
                       </span>
 
                       <button
                         onClick={() => toggleWorker(id)}
-                        className="text-white font-bold"
+                        className="text-white text-sm font-semibold"
                       >
                         ✕
                       </button>
@@ -249,7 +243,7 @@ function RoomDetailModal({
                     : "bg-blue-600 hover:bg-blue-700"
                 }`}
               >
-                {loading ? "Submitting..." : "Submit Assignment"}
+                {loading ? "Please wait..." : "Submit Assignment"}
               </button>
             </div>
 

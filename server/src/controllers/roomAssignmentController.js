@@ -3,9 +3,12 @@ import {
   createRoomAssignmentService,
   getAllRoomAssignmentsService,
   getWorkerTasksService,
-  acceptTaskService
+  acceptTaskService,
+  getTaskDetailService,
+  submitWorkerTaskService
 } from "../services/roomAssignmentService.js";
 
+// ROOM MATRIX/ASSIGNMENT
 
 // get all workers (response)
 export const getWorkers = async (req, res) => {
@@ -33,7 +36,7 @@ export const getAllRoomAssignments = async (req, res) => {
   }
 };
 
-// create room assignment (response)
+// post room assignment (response)
 export const createRoomAssignments = async (req, res) => {
   try {
     const {
@@ -59,6 +62,28 @@ export const createRoomAssignments = async (req, res) => {
   }
 };
 
+// MY TASKS
+
+// patch worker accept task
+export const acceptTask = async (req, res) => {
+  try {
+    const { assignment_worker_id, assignment_id } = req.body;
+
+    const result = await acceptTaskService({
+      assignment_worker_id,
+      assignment_id,
+    });
+
+    res.json({
+      message: "Task accepted successfully",
+      data: result,
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // get worker tasks
 export const getWorkerTasks = async (req, res) => {
   try {
@@ -76,22 +101,50 @@ export const getWorkerTasks = async (req, res) => {
   }
 };
 
-// worker accept task
-export const acceptTask = async (req, res) => {
+// get worker task detail
+export const getTaskDetail = async (
+  req,
+  res
+) => {
   try {
-    const { assignment_worker_id, assignment_id } = req.body;
 
-    const result = await acceptTaskService({
-      assignment_worker_id,
-      assignment_id,
-    });
+    const { assignment_worker_id } =
+      req.params;
 
-    res.json({
-      message: "Task accepted successfully",
-      data: result,
-    });
+    const result =
+      await getTaskDetailService(
+        assignment_worker_id
+      );
+
+    res.json(result);
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+};
+
+// post worker submission
+export const submitWorkerTask = async (req, res) => {
+  try {
+    const {
+      assignment_worker_id,
+      notes,
+      image_url,
+    } = req.body;
+
+    const result =
+      await submitWorkerTaskService({
+        assignment_worker_id,
+        notes,
+        image_url,
+      });
+
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
   }
 };

@@ -3,8 +3,6 @@ import RoomCard from "../../components/room-matrix/RoomCard";
 import { getAllRooms } from "../../services/roomService";
 import RoomMatrixFilter from "../../components/room-matrix/RoomMatrixFilter";
 import RoomDetailModal from "../../components/room-matrix/RoomDetailModal";
-import { getAssignments } from "../../services/roomAssignmentService";
-
 
 function RoomMatrix() {
   const [rooms, setRooms] = useState([]);
@@ -13,7 +11,6 @@ function RoomMatrix() {
   const [floorFilter, setFloorFilter] = useState("all"); // filter by floor
   const [isModalOpen, setIseModalOpen] = useState(false); // modal
   const [selectedRoom, setSelectedRoom] = useState(null); // room select
-  const [assignments, setAssignments] = useState([]); // room assignment
 
   // fetch rooms db
   const fetchRooms = async () => {
@@ -44,34 +41,6 @@ function RoomMatrix() {
 
     return matchCategory && matchFloor;
   });
-
-  // fetch room_assignment db
-  const fetchAssignments = async () => {
-    try {
-      const data = await getAssignments();
-      setAssignments(data);
-    } catch (err) {
-      console.error("Failed to fetch assignments:", err);
-    }
-  };
-  useEffect(() => {
-    fetchRooms();
-    fetchAssignments();
-  }, []);
-
-  // get room_assignment
-  const getLatestAssignmentByRoom = (roomId) => {
-    const roomAssignments = assignments.filter(
-      (a) => a.room_id === roomId
-    );
-
-    if (roomAssignments.length === 0) return null;
-
-    // get latest by created_at
-    return roomAssignments.sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at)
-    )[0];
-  };
 
   // group rooms by hotel and residency
   const groupedRooms = filteredRooms.reduce((acc, room) => {
@@ -151,7 +120,6 @@ function RoomMatrix() {
                             setSelectedRoom(room);
                             setIseModalOpen(true);
                           }} 
-                          assignment={getLatestAssignmentByRoom(room.id)}
                           />
                         ))}
                       </div>
@@ -167,8 +135,7 @@ function RoomMatrix() {
         isOpen={isModalOpen}
         onClose={() => setIseModalOpen(false)}
         room={selectedRoom}
-        assignment={getLatestAssignmentByRoom(selectedRoom?.id)} // get room_assignment.status
-        onAssignmentCreated={fetchAssignments}
+        onAssignmentCreated={fetchRooms}
       />
     </div>
   );

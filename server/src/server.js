@@ -24,7 +24,8 @@ app.use("/api/auth", authRoutes);
 
 // rooms route
 app.use("/api/rooms", roomRoutes);
-// room assignment route
+
+// room assignment route and worker tasks
 app.use("/api/room-assignments", roomAssignmentRoutes);
 
 // reports route

@@ -128,7 +128,6 @@ function DefectForm({ defects, setDefects, resetKey }) {
         </div>
       ))}
 
-      {/* ADD BUTTON */}
       <div className="w-full flex mt-2">
         <button
           type="button"

@@ -1,22 +1,15 @@
-function RoomCard({ room, onClick, assignment }) {
+function RoomCard({ room, onClick, }) {
 
-  // room status color (from db rooms.status)
+  // room matrix status color (from db rooms.status)
   const roomStatusColor = {
     normal: "bg-green-500 hover:bg-green-400",
     defect: "bg-red-500 hover:bg-red-400",
+    maintenance: "bg-yellow-500 hover:bg-yellow-400",
   };
 
-  // assignment status color (from room_assignment.status)
-  const assignmentStatusColor = {
-    pending: "bg-yellow-500 hover:bg-yellow-400",
-    on_progress: "bg-blue-500 hover:bg-blue-400",
-    completed: "bg-green-500 hover:bg-green-400",
-  };
-
-  // room_assignment.status overrides rooms.status color
-  const activeClass = assignment
-    ? assignmentStatusColor[assignment.status]
-    : roomStatusColor[room.status];
+  // status color for rooms.status 
+  const activeClass =
+    roomStatusColor[room.status] || "bg-gray-500 hover:bg-gray-400";
 
   return (
     <button

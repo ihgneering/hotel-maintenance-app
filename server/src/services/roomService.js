@@ -12,7 +12,7 @@ export const getAllRoomsService = async () => {
   return data;
 };
 
-// get floor from rooms db
+// get rooms.floor
 export const getRoomsByFloorService = async (floor) => {
   const { data, error } = await supabase
     .from("rooms")
